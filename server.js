@@ -11,8 +11,8 @@ const port = process.env.PORT || 5000;
 const corsOptions = {
     credentials: true, // This is important.
     origin: "*",
-    methods:["POST","GET", "PUT", "DELETE", "OPTIONS"],
-    headers:["X-Requested-With", "content-type"]
+    methods: ["POST", "GET", "PUT", "DELETE", "OPTIONS"],
+    headers: ["X-Requested-With", "content-type"]
 };
 
 
@@ -28,10 +28,14 @@ const ms = moysklad({
     password
 });
 
-serv.get("/entity/product", (req, res)=>{
+serv.get("/entity/product", (req, res) => {
     let limit = 25;
     let offset = 0;
+    let search = "";
 
+    if (req.query.search != null) {
+        search = req.query.search;
+    }
     if (req.query.limit != null) {
         limit = req.query.limit;
     }
@@ -39,12 +43,12 @@ serv.get("/entity/product", (req, res)=>{
         offset = req.query.offset;
     }
 
-    ms.GET("entity/product", {limit, offset}).then(require=>{
+    ms.GET("entity/product", {limit, offset, search}).then(require => {
         const answer = {};
         answer.products = require.rows;
         answer.size = require.meta.size;
         res.json(answer);
-    },err=>{
+    }, err => {
         res.error(err)
     });
 });
