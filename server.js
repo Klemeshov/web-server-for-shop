@@ -56,4 +56,3 @@ serv.get("/entity/product", (req, res) => {
 serv.listen(port, () => {
     console.log("server started");
 });
-
