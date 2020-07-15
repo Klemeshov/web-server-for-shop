@@ -28,6 +28,7 @@ const ms = moysklad({
     password
 });
 
+//limit<int>, offset<int>, search<string>
 serv.get("/entity/product", (req, res) => {
     let limit = 25;
     let offset = 0;
@@ -50,6 +51,33 @@ serv.get("/entity/product", (req, res) => {
         res.json(answer);
     }, err => {
         res.error(err)
+    });
+});
+
+//name<string> phone<string>(Example:9823007074) email<string>
+serv.get("/entity/counterparty", (req, res) => {
+    let name = "";
+    let phone = "";
+    let email = "";
+
+    if (req.query.name != null) {
+        name = req.query.name;
+    }
+    if (req.query.phone != null) {
+        phone = req.query.phone;
+    }
+    if (req.query.email != null) {
+        email = req.query.email;
+    }
+
+    ms.GET(`/entity/counterparty`,{filter:{name, email, phone}}).then(require => {
+        const answer = {};
+        answer.counterparty = require.rows;
+        answer.size = require.meta.size;
+        console.log(answer);
+        res.json(answer);
+    }, err=>{
+        console.log(err);
     });
 });
 
