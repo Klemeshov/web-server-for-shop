@@ -54,7 +54,7 @@ serv.get("/entity/product", (req, res) => {
     });
 });
 
-//name<string> phone<string>(Example:9823007074) email<string>
+//name<string> phone<string> email<string>
 serv.get("/entity/counterparty", (req, res) => {
     let name = "";
     let phone = "";
@@ -70,15 +70,21 @@ serv.get("/entity/counterparty", (req, res) => {
         email = req.query.email;
     }
 
-    ms.GET(`/entity/counterparty`,{filter:{name, email, phone}}).then(require => {
+    ms.GET(`/entity/counterparty`, {filter: {name, email, phone}}).then(require => {
         const answer = {};
-        answer.counterparty = require.rows;
+        answer.counterpartys = require.rows;
         answer.size = require.meta.size;
-        console.log(answer);
         res.json(answer);
-    }, err=>{
+    }, err => {
         console.log(err);
     });
+});
+
+serv.post("/entity/counterparty", (req, res) => {
+    data = req.body;
+    ms.POST("/entity/counterparty", {...data}).then(require => {
+        res.json(require);
+    })
 });
 
 serv.listen(port, () => {
