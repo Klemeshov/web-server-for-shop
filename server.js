@@ -28,21 +28,15 @@ const ms = moysklad({
     password
 });
 
-//limit<int>, offset<int>, search<string>
+//limit<int>, offset<int>, search<string> товары и услуги
 serv.get("/entity/product", (req, res) => {
     let limit = 25;
     let offset = 0;
     let search = "";
 
-    if (req.query.search != null) {
-        search = req.query.search;
-    }
-    if (req.query.limit != null) {
-        limit = req.query.limit;
-    }
-    if (req.query.offset != null) {
-        offset = req.query.offset;
-    }
+    if (req.query.search != null) {search = req.query.search;}
+    if (req.query.limit != null) {limit = req.query.limit;}
+    if (req.query.offset != null) {offset = req.query.offset;}
 
     ms.GET("entity/product", {limit, offset, search}).then(require => {
         const answer = {};
@@ -54,21 +48,35 @@ serv.get("/entity/product", (req, res) => {
     });
 });
 
-//name<string> phone<string> email<string>
+//limit<int>, offset<int>, search<string> остатки
+serv.get("/report/stock/all", (req, res)=>{
+    let limit = 25;
+    let offset = 0;
+    let search = "";
+
+    if (req.query.search != null) {search = req.query.search;}
+    if (req.query.limit != null) {limit = req.query.limit;}
+    if (req.query.offset != null) {offset = req.query.offset;}
+
+    ms.GET("report/stock/all", {limit, offset, search}).then(require => {
+        const answer = {};
+        answer.products = require.rows;
+        answer.size = require.meta.size;
+        res.json(answer);
+    }, err => {
+        res.error(err)
+    });
+});
+
+//name<string> phone<string> email<string> контрагенты
 serv.get("/entity/counterparty", (req, res) => {
     let name = "";
     let phone = "";
     let email = "";
 
-    if (req.query.name != null) {
-        name = req.query.name;
-    }
-    if (req.query.phone != null) {
-        phone = req.query.phone;
-    }
-    if (req.query.email != null) {
-        email = req.query.email;
-    }
+    if (req.query.name != null) {name = req.query.name;}
+    if (req.query.phone != null) {phone = req.query.phone;}
+    if (req.query.email != null) {email = req.query.email;}
 
     ms.GET(`/entity/counterparty`, {filter: {name, email, phone}}).then(require => {
         const answer = {};
@@ -80,6 +88,7 @@ serv.get("/entity/counterparty", (req, res) => {
     });
 });
 
+//создать контрагента
 serv.post("/entity/counterparty", (req, res) => {
     data = req.body;
     ms.POST("/entity/counterparty", {...data}).then(require => {
