@@ -52,19 +52,21 @@ serv.get("/entity/product", (req, res) => {
 serv.get("/report/stock/all", (req, res)=>{
     let limit = 25;
     let offset = 0;
-    let search = "";
+    let search = null;
+    let order = "name";
 
     if (req.query.search != null) {search = req.query.search;}
     if (req.query.limit != null) {limit = req.query.limit;}
     if (req.query.offset != null) {offset = req.query.offset;}
+    if (req.query.order != null) {order = req.query.order;}
 
-    ms.GET("report/stock/all", {limit, offset, search}).then(require => {
+    ms.GET("report/stock/all", {filter:search?"search="+search:"", limit, offset, order}).then(require => {
         const answer = {};
         answer.products = require.rows;
         answer.size = require.meta.size;
         res.json(answer);
     }, err => {
-        res.error(err)
+        res.sendStatus(400)
     });
 });
 
