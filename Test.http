@@ -1,0 +1,7 @@
+GET localhost:5000/entity/product?limit=kfdbsdk
+
+###
+
+GET localhost:5000/entity/productfolder
+
+###

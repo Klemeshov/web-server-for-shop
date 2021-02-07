@@ -35,6 +35,7 @@ exports.ms = ms;
 const {getStocks} = require("./Controllers/Stocks");
 const {getProducts} = require("./Controllers/Products");
 const {getCounterparties, createCounterparty} = require("./Controllers/Counterparties");
+const {getProductFolders} = require("./Controllers/ProductFolders");
 
 
 //limit<int>, offset<int>, search<string> товары и услуги
@@ -50,7 +51,9 @@ serv.get("/entity/counterparty", getCounterparties);
 //создать контрагента
 serv.post("/entity/counterparty", createCounterparty);
 
+//группы товаров
+serv.get ("/entity/productfolder",getProductFolders)
 
 serv.listen(port, () => {
-    console.log("server started");
+    console.log("server started on port " + port);
 });
